@@ -4,25 +4,20 @@
       <div class="col-6">
         <q-table
           title="Users"
+          :filter="tblUserFilter"
           :columns="tblUserColumns"
           :data="tblUserData"
           :rows-per-page-options="tblUserRowsPerPageOptions"
           :pagination.sync="tblUserPagination"
           :loading="tblUserIsLoading"
-          @request="tblUserOnRequest"
+          v-on:request="tblUserOnRequest"
         >
-          <template v-slot:body="props">
-            <q-tr :props="props">
-              <q-td :props="props" key="id">{{ props.row.id }}</q-td>
-              <q-td :props="props" key="email">{{ props.row.email }}</q-td>
-              <q-td :props="props" key="first_name">{{ props.row.first_name }}</q-td>
-              <q-td :props="props" key="last_name">{{ props.row.last_name }}</q-td>
-              <q-td :props="props" key="avatar">
-                <q-avatar size="40px">
-                  <img :src="props.row.avatar" />
-                </q-avatar>
-              </q-td>
-            </q-tr>
+          <template v-slot:body-cell-avatar="props">
+            <q-td :props="props">
+              <q-avatar size="40px">
+                <img :src="props.row.avatar" />
+              </q-avatar>
+            </q-td>
           </template>
         </q-table>
       </div>
@@ -38,12 +33,28 @@ export default {
     return {
       // table User config
       tblUserColumns: [
-        { name: "id", label: "ID", align: "left" },
-        { name: "email", label: "Email", align: "left" },
-        { name: "first_name", label: "First Name", align: "left" },
-        { name: "last_name", label: "Last Name", align: "left" },
+        { name: "id", label: "ID", align: "left", field: row => row.id },
+        {
+          name: "email",
+          label: "Email",
+          align: "left",
+          field: row => row.email
+        },
+        {
+          name: "first_name",
+          label: "First Name",
+          align: "left",
+          field: row => row.first_name
+        },
+        {
+          name: "last_name",
+          label: "Last Name",
+          align: "left",
+          field: row => row.last_name
+        },
         { name: "avatar", label: "Avatar", align: "center" }
       ],
+      tblUserFilter: "",
       tblUserRowsPerPageOptions: [3, 5, 10, 15, 25, 50, 100],
       tblUserPagination: {
         page: 1,
